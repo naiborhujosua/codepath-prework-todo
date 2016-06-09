@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/save_item"
         android:id="@+id/btnSaveItem"
+        android:onClick="onSave"
         android:layout_below="@+id/etUpdateText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

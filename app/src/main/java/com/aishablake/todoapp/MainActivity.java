@@ -1,6 +1,7 @@
 package com.aishablake.todoapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,7 @@ public class MainActivity extends Activity {
     ArrayAdapter<String> toDoAdapter;
     ListView lvItems;
     EditText etEditText;
+    private final int REQUEST_CODE = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,26 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+                intent.putExtra("item_text", toDoItems.get(position));
+                intent.putExtra("item_index", position);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String updatedText = data.getExtras().getString("updated_text");
+            int updateIndex = data.getExtras().getInt("update_index");
+            toDoItems.set(updateIndex, updatedText);
+            toDoAdapter.notifyDataSetChanged();
+            writeItems();
+        }
     }
 
     public void populateArrayItems() {

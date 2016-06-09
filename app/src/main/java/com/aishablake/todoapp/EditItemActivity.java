@@ -1,16 +1,25 @@
 package com.aishablake.todoapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 public class EditItemActivity extends Activity {
+    EditText etUpdateText;
+    int updateIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
+        etUpdateText = (EditText) findViewById(R.id.etUpdateText);
+        etUpdateText.setText(getIntent().getStringExtra("item_text"));
+        etUpdateText.setSelection(etUpdateText.length());
+        updateIndex = getIntent().getIntExtra("item_index", 0);
     }
 
 
@@ -31,5 +40,13 @@ public class EditItemActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSave(View v) {
+        Intent data = new Intent();
+        data.putExtra("updated_text", etUpdateText.getText().toString());
+        data.putExtra("update_index", updateIndex);
+        setResult(RESULT_OK, data);
+        this.finish();
     }
 }
